@@ -16,8 +16,8 @@ import os
        #   |                |           | fj, fh, fks, ejm, ehm, ekm, gcflg, leda, x2m
        # b | char           | integer 1 | ebma, evma, egma, erma, eima
 
-z_catalog = r'C:\Users\User\Documents\UCAC4---UCAC5\ucac4_test_folder'       # folder with directories
-binary_unpack = '=IIHHBBBBBBBBHHhhBBIhhhBBBBBBhhHHHbbbbbBIBBIHI'             # format characters module struct (78 bytes)
+z_catalog = r'R:\Git_hub\UCAC4---UCAC5\ucac4_test_folder'            #r'C:\Users\User\Documents\UCAC4---UCAC5\ucac4_test_folder'       # folder with directories
+binary_unpack = '=IIHHBBBbbBBBHHhhbbIhhhBBBBBBhhHHHbbbbbBIBBIHI'             # format characters module struct (78 bytes)
 col = ['ra', 'spd', 'momag', 'apmag', 'sigmag', 'objt', 'dsf', 'sigra', 'sigdc', 'nt', 'ns', 'nc', 'cepra', 'cepdc', 'pmrac', 'pmdc', 'sigpmr', 'sigpmd', 'pts_key', 'jm', 'hm', 'km', 'fj', 'fh', 'fks', 'ejm', 'ehm', 'ekm', 'bma', 'vma', 'gma', 'rma', 'ima', 'ebma', 'evma', 'egma', 'erma', 'eima', 'gcflg', 'tsf', 'leda', 'x2m', 'rnm', 'zn2', 'rn2']
 pg_engine = create_engine('postgresql+psycopg2://user@localhost:5433/test2')
 psql = 'select * from "ucac4" limit 300;'
@@ -26,7 +26,7 @@ psql = 'select * from "ucac4" limit 300;'
 counter_w=0
 
 # walk through files in a directory z_catalog
-zfiles = [f for f in os.listdir(z_catalog) if f.startswith("z")]
+zfiles = [f for f in os.listdir(z_catalog) if f.startswith("z001")]
 for z_files in zfiles:
     full_name_path = os.path.join(z_catalog, z_files)
     with open(full_name_path, 'rb') as fin:
@@ -38,21 +38,21 @@ for z_files in zfiles:
             din = fin.read(78)   # 78 bytes one row
             if len(din) == 78:
                 list_row = list(struct.unpack(binary_unpack, din)) 
-                #print(list_row)
-                all_catalog.append(list_row)
+                print(list_row)
+                #all_catalog.append(list_row)
                 #n = n + 1
                 #s.append(str(n).zfill(6))
         #zn = ''.join((z_files.lstrip('z'), '-')).split() * all_catalog.__len__() 
         #idn = [zn[i] + s[i] for i in range(len(s))]  
-        df = pd.DataFrame(all_catalog, columns = col)
-        print(df)
-        if counter_w == 0:
-            df.to_sql('ucac4', con=pg_engine)
-            counter_w = 1
-        else:
-            df.to_sql('ucac4', con=pg_engine, if_exists='append')
+        #df = pd.DataFrame(all_catalog, columns = col)
+        #print(df)
+        #if counter_w == 0:
+            #df.to_sql('ucac4', con=pg_engine)
+            #counter_w = 1
+        #else:
+            #df.to_sql('ucac4', con=pg_engine, if_exists='append')
 
-pg_df = pd.read_sql_query(psql, con=pg_engine)
-print(pg_df)
+#pg_df = pd.read_sql_query(psql, con=pg_engine)
+#print(pg_df)
 
 
