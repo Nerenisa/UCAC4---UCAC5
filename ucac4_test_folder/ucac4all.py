@@ -17,11 +17,11 @@ import os
        #   |                |           | fj, fh, fks, ejm, ehm, ekm, gcflg, leda, x2m
        # b | char           | integer 1 | ebma, evma, egma, erma, eima
 
-z_catalog = r'R:\Git_hub\UCAC4---UCAC5\ucac4_test_folder'       #'/home/source_cat/UCAC4/u4b'     #r'C:\Users\User\Documents\UCAC4---UCAC5\ucac4_test_folder'       # folder with directories
+z_catalog = '/home/source_cat/UCAC4/u4b'      #r'R:\Git_hub\UCAC4---UCAC5\ucac4_test_folder'       #'/home/source_cat/UCAC4/u4b'     #r'C:\Users\User\Documents\UCAC4---UCAC5\ucac4_test_folder'       # folder with directories
 binary_unpack = '=IIHHBBBBBBBBHHhhBBIhhhBBBBBBhhHHHbbbbbBIBBIHI'             # format characters module struct (78 bytes)
 col = ['ra', 'spd', 'momag', 'apmag', 'sigmag', 'objt', 'dsf', 'sigra', 'sigdc', 'nt', 'ns', 'nc', 'cepra', 'cepdc', 'pmrac', 'pmdc', 'sigpmr', 'sigpmd', 'pts_key', 'jm', 'hm', 'km', 'fj', 'fh', 'fks', 'ejm', 'ehm', 'ekm', 'bma', 'vma', 'gma', 'rma', 'ima', 'ebma', 'evma', 'egma', 'erma', 'eima', 'gcflg', 'tsf', 'leda', 'x2m', 'rnm', 'zn2', 'rn2']
-#pg_engine = create_engine('postgresql+psycopg2://user@localhost:5433/test2')
-#psql = 'select * from "ucac4" limit 300;'
+pg_engine = create_engine('postgresql+psycopg2://user@localhost:5433/test2')
+psql = 'select * from "ucac4" limit 300;'
 
 
 counter_w=0
@@ -45,15 +45,15 @@ for z_files in zfiles:
                 #s.append(str(n).zfill(6))
         #zn = ''.join((z_files.lstrip('z'), '-')).split() * all_catalog.__len__() 
         #idn = [zn[i] + s[i] for i in range(len(s))]  
-        #df = pd.DataFrame(all_catalog, columns = col)
+        df = pd.DataFrame(all_catalog, columns = col)
         #print(df)
-        #if counter_w == 0:
-            #df.to_sql('ucac4', index=False, con=pg_engine)
-            #counter_w = 1
-        #else:
-            #df.to_sql('ucac4', con=pg_engine, index=False, if_exists='append')
+        if counter_w == 0:
+            df.to_sql('ucac4', index=False, con=pg_engine)
+            counter_w = 1
+        else:
+            df.to_sql('ucac4', con=pg_engine, index=False, if_exists='append')
 
-#pg_df = pd.read_sql_query(psql, con=pg_engine)
-#print(pg_df)
+pg_df = pd.read_sql_query(psql, con=pg_engine)
+print(pg_df)
 
 
