@@ -32,19 +32,13 @@ for z_files in zfiles:
     full_name_path = os.path.join(z_catalog, z_files)
     with open(full_name_path, 'rb') as fin:
         din = True
-        #n = 0
         all_catalog = []         # creating a temporary list of decoded binary file strings z001....z900
-        #s = []                   # creation of a temporary list from binary file line numbering z001....z900
         while din:
             din = fin.read(78)   # 78 bytes one row
             if len(din) == 78:
                 list_row = list(struct.unpack(binary_unpack, din)) 
                 #print(list_row)
                 all_catalog.append(list_row)
-                #n = n + 1
-                #s.append(str(n).zfill(6))
-        #zn = ''.join((z_files.lstrip('z'), '-')).split() * all_catalog.__len__() 
-        #idn = [zn[i] + s[i] for i in range(len(s))]  
         df = pd.DataFrame(all_catalog, columns = col)
         #print(df)
         if counter_w == 0:
