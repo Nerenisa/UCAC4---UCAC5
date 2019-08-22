@@ -8,30 +8,24 @@ import numpy as np
 import struct
 import os
 import sys
-import pickle
 
 
-files = ['z001'] #['z001', 'z002', 'z003', 'z004', 'z005', 'z006', 'z007', 'z008', 'z009', 'z010', 'z011', 'z012', 'z010',      ]
 binary_pack = '=IIHHBBBBBBBBHHhhBBIhhhBBBBBBhhHHHbbbbbBIBBIHI'
 pg_engine = create_engine('postgresql+psycopg2://user@localhost:5433/test2')
 s = list(range(0, 648000000, 720000))       # 
-#print(s)
 d = list(range(720000, 648720000, 720000))
-#print(d)
-z = 1
+z = 0
 for i, x in zip(s, d):
+    files = []
     psql = ' '.join(('select * from "ucac4" where spd >=', str(i), 'and', 'spd <', str(x), 'order by ra;'))
     pg_df = pd.read_sql_query(psql, con=pg_engine)
     #print(pg_df)
     z = z + 1
     files.append(''.join(('z', str(z).zfill(3))))
-    write_list = []
     for row in pg_df.itertuples(index=False, name=False):
         #print(row)
         binary = struct.pack(binary_pack, *row)
-        #print(binary)
-        write_list.append(binary)    
-    #print(write_list)
         for file in files:
-            with open(file, 'wb') as fout:
-                pickle.dump(write_list, fout)
+            with open(file, 'ab') as fout:
+                fout.write(binary)
+            
