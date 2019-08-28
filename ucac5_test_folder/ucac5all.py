@@ -17,8 +17,8 @@ import os
        #   |                |           | 
        # b | char           | integer 1 | 
 
-z_catalog =  r'C:\Users\User\Documents\UCAC4---UCAC5\ucac5_test_folder'    # '/home/source_cat/UCAC5/u5z'   # folder with directories
-binary_unpack = '=QIiHHBBHIihhHHHHHHHH'             # format characters module struct (52 bytes)
+z_catalog = '/home/source_cat/UCAC5/u5z'   # folder with directories
+binary_unpack = '=QIIHHBBHIIhhHHHHHHHH'             # format characters module struct (52 bytes)
 col = ['srcid', 'rag', 'dcg', 'erg', 'edg', 'flg', 'nu1', 'epu', 'ira', 'idc', 'pmur', 'pmud', 'pmer', 'pmed', 'gmag', 'umag', 'rmag', 'jmag', 'hmag', 'kmag']
 #pg_engine = create_engine('postgresql+psycopg2://user@localhost:5433/test2')
 #psql = 'select * from "ucac5" limit 300;'
