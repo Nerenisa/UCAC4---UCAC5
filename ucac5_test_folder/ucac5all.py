@@ -18,10 +18,10 @@ import os
        # b | char           | integer 1 | 
 
 z_catalog = '/home/source_cat/UCAC5/u5z'   # folder with directories
-binary_unpack = '=QIIHHBBHIIhhHHHHHHHH'             # format characters module struct (52 bytes)
+binary_unpack = '=QIiHHBBHIihhHHHHHHHH'    # format characters module struct (52 bytes)
 col = ['srcid', 'rag', 'dcg', 'erg', 'edg', 'flg', 'nu1', 'epu', 'ira', 'idc', 'pmur', 'pmud', 'pmer', 'pmed', 'gmag', 'umag', 'rmag', 'jmag', 'hmag', 'kmag']
-#pg_engine = create_engine('postgresql+psycopg2://user@localhost:5433/test2')
-#psql = 'select * from "ucac5" limit 300;'
+pg_engine = create_engine('postgresql+psycopg2://user@localhost:5433/test2')
+psql = 'select * from "ucac5" limit 300;'
 
 
 counter_w=0
@@ -37,15 +37,15 @@ for z_files in zfiles:
             din = fin.read(52)   # 52 bytes one row
             if len(din) == 52:
                 list_row = list(struct.unpack(binary_unpack, din)) 
-                print(list_row)
-                #all_catalog.append(list_row)
-        #df = pd.DataFrame(all_catalog, columns = col)
+                #print(list_row)
+                all_catalog.append(list_row)
+        df = pd.DataFrame(all_catalog, columns = col)
         #print(df)
-        #if counter_w == 0:
-            #df.to_sql('ucac5', index=False, con=pg_engine)
-           # counter_w = 1
-        #else:
-            #df.to_sql('ucac5', con=pg_engine, index=False, if_exists='append')
+        if counter_w == 0:
+            df.to_sql('ucac5', index=False, con=pg_engine)
+            counter_w = 1
+        else:
+            df.to_sql('ucac5', con=pg_engine, index=False, if_exists='append')
 
-#pg_df = pd.read_sql_query(psql, con=pg_engine)
-#print(pg_df)
+pg_df = pd.read_sql_query(psql, con=pg_engine)
+print(pg_df)
